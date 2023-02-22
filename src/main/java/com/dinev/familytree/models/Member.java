@@ -1,17 +1,14 @@
-package com.dinev.familytree.model;
+package com.dinev.familytree.models;
 
+import com.dinev.familytree.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Parent;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serial;
@@ -47,7 +44,7 @@ public class Member extends BaseEntity {
     private Boolean enabled;
 
     @Column(name = "gender")
-    private Boolean isMale;
+    private Gender gender;
 
     @ManyToMany
     private Set<Member> parents = new HashSet<>();
@@ -55,8 +52,8 @@ public class Member extends BaseEntity {
     @ManyToMany(mappedBy = "parents")
     private Set<Member> children = new HashSet<>();
 
-    public void addParents(Member father, Member mother){
-        if (!father.isMale && mother.isMale){
+    public Member addParents(Member father, Member mother){
+        if (!father.gender.equals(Gender.MALE) && mother.gender.equals(Gender.FEMALE)){
             throw new IllegalArgumentException();
         }
         if (!parents.isEmpty()){
@@ -67,5 +64,7 @@ public class Member extends BaseEntity {
 
         parents.add(mother);
         mother.getChildren().add(this);
+
+        return this;
     }
 }

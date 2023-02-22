@@ -1,4 +1,4 @@
-package com.dinev.familytree.model;
+package com.dinev.familytree.models;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -6,7 +6,6 @@ import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
