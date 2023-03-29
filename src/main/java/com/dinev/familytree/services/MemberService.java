@@ -2,7 +2,6 @@ package com.dinev.familytree.services;
 
 import com.dinev.familytree.dtos.MemberRelates;
 import com.dinev.familytree.dtos.MemberDTO;
-import com.dinev.familytree.dtos.MemberWrapper;
 import com.dinev.familytree.exceptions.EntityAlreadyExistsException;
 import com.dinev.familytree.models.Member;
 import com.dinev.familytree.repositories.MemberRepository;
@@ -10,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -21,7 +21,8 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository repository;
 
-    public MemberDTO add(final MemberDTO entity) {
+    @Transactional
+    public MemberDTO addMember(final MemberDTO entity) {
         boolean isMemberAlreadyAdded = repository.existsMemberByFirstNameAndSureNameAndLastNameIgnoreCase
                 (entity.getFirstName(), entity.getSureName(), entity.getLastName());
 
@@ -44,19 +45,21 @@ public class MemberService {
         }
     }
 
-    public Member addParents(MemberRelates members) {
+    @Transactional
+    public MemberDTO addParents(MemberRelates members) {
 
         Member father = repository.findById(members.getFatherId()).get();
         Member mother = repository.findById(members.getMotherId()).get();
-        Member member = repository.findById(members.getMemberId()).get();
+        Member initialMember = repository.findById(members.getMemberId()).get();
+
         List<Member> all = new ArrayList<>();
         all.add(father);
         all.add(mother);
-        all.add(member);
+        all.add(initialMember);
 
-        Member member1 =  member.addParents(father, mother);
+        Member member =  initialMember.addParents(father, mother);
         repository.saveAll(all);
 
-        return member1;
+        return MemberDTO.of(member);
     }
 }

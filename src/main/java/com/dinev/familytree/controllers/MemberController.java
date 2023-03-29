@@ -1,6 +1,5 @@
 package com.dinev.familytree.controllers;
 
-
 import com.dinev.familytree.dtos.MemberRelates;
 import com.dinev.familytree.dtos.MemberDTO;
 import com.dinev.familytree.services.MemberService;
@@ -22,21 +21,19 @@ public class MemberController {
     private final MemberService service;
 
     @PostMapping("/")
-    public ResponseEntity<?> addMember(@RequestBody final MemberDTO dto){
-       MemberDTO newMember = service.add(dto);
+    public ResponseEntity<?> addMember(@RequestBody final MemberDTO dto) {
+        MemberDTO newMember = service.addMember(dto);
 
-        return ResponseEntity
-                .status(HttpStatus.ACCEPTED)
-                .body(newMember);
+        //return ResponseEntity.accepted().body();
+//        return ResponseEntity
+//                .status(HttpStatus.ACCEPTED)
+//                .body(newMember);
+        return null;
     }
 
-@PostMapping("/addParents")
-    public ResponseEntity<?> addParents(@RequestBody MemberRelates members){
-
+    @PostMapping("/addParents")
+    public ResponseEntity<?> addParents(@RequestBody MemberRelates members) {
         service.addParents(members);
-
-
-
         return null;
     }
 }
