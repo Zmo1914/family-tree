@@ -3,6 +3,7 @@ package com.dinev.familytree.services;
 import com.dinev.familytree.dtos.MemberRelates;
 import com.dinev.familytree.dtos.MemberDTO;
 import com.dinev.familytree.exceptions.EntityAlreadyExistsException;
+import com.dinev.familytree.exceptions.EntityNotFoundException;
 import com.dinev.familytree.models.Member;
 import com.dinev.familytree.repositories.MemberRepository;
 import lombok.AccessLevel;
@@ -22,7 +23,7 @@ public class MemberService {
     private final MemberRepository repository;
 
     @Transactional
-    public MemberDTO addMember(final MemberDTO entity) {
+    public Member addMember(final MemberDTO entity) {
         boolean isMemberAlreadyAdded = repository.existsMemberByFirstNameAndSureNameAndLastNameIgnoreCase
                 (entity.getFirstName(), entity.getSureName(), entity.getLastName());
 
@@ -39,10 +40,19 @@ public class MemberService {
 
             repository.save(member);
             log.info("Member " + entity.getFirstName() + " is added.");
-            return MemberDTO.of(member);
+            return member;
         } else {
             throw new EntityAlreadyExistsException(Member.class, entity.getFirstName());
         }
+    }
+
+    @Transactional
+    public Member addMember(final Member member){
+        if (member == null){
+            throw new RuntimeException("Member is required.");
+        }
+
+        return repository.save(member);
     }
 
     @Transactional
@@ -61,5 +71,9 @@ public class MemberService {
         repository.saveAll(all);
 
         return MemberDTO.of(member);
+    }
+
+    public Member findById(final String memberId){
+        return repository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(Member.class, memberId));
     }
 }

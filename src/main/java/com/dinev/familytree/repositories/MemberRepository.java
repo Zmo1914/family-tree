@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String> {
 
-    boolean existsMemberByFirstNameAndSureNameAndLastNameIgnoreCase
-            (String firstName, String sureName, String lastName);
+    boolean existsMemberByFirstNameAndSureNameAndLastNameIgnoreCase(String firstName, String sureName, String lastName);
 
-    //List<Member> findByIds(MemberRelates membersId);
 }

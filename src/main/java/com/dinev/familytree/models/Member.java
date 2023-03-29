@@ -57,13 +57,23 @@ public class Member extends BaseEntity {
             throw new IllegalArgumentException();
         }
         if (!parents.isEmpty()){
-            throw new IllegalArgumentException();
+            throw new RuntimeException("Member already has parents.");
         }
         parents.add(father);
         father.getChildren().add(this);
 
         parents.add(mother);
         mother.getChildren().add(this);
+
+        return this;
+    }
+
+    public Member removeParent(Member parent){
+        if (parents.isEmpty()){
+            throw new RuntimeException();
+        }
+        parents.remove(parent);
+        parent.getChildren().remove(parent);
 
         return this;
     }
