@@ -32,13 +32,16 @@ public class MemberDTO {
     private String sureName;
     private String lastName;
     private LocalDate birthDate;
-    private Gender gender;
+    private String gender;
     private Set<String> parentIds;
     private Set<String> childrenIds;
+
+
 
     public static Member to(MemberDTO source) {
         Member entity = new Member();
         BeanUtils.copyProperties(source, entity);
+        entity.setGender(Gender.valueOf(source.gender));
 
         if (!CollectionUtils.isEmpty(source.getParentIds())) {
             source.getParentIds().forEach(p -> entity.getParents()
