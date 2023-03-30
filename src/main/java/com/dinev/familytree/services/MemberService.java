@@ -72,6 +72,9 @@ public class MemberService {
         return MemberDTO.of(member);
     }
 
+    //TODO: Create removeParents() method
+    //TODO: Create removeParent() method.
+
     public Member findById(final String memberId) {
         return repository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(Member.class, memberId));
     }
