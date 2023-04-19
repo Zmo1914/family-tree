@@ -54,11 +54,14 @@ public class Member extends BaseEntity {
     @ManyToMany
     private Set<Member> parents = new HashSet<>();
 
-    @ManyToMany(mappedBy = "parents")
+    @ManyToMany
     private Set<Member> children = new HashSet<>();
 
-    public Member removeParent(Member parent){
-        if (parents.isEmpty()){
+    @ManyToMany
+    private Set<Member> siblings = new HashSet<>();
+
+    public Member removeParent(Member parent) {
+        if (parents.isEmpty()) {
             throw new RuntimeException();
         }
         parents.remove(parent);

@@ -37,6 +37,15 @@ public class MemberService {
     }
 
     @Transactional
+    public List<Member> addMembers(final List<Member> members){
+        if (members.isEmpty()){
+            throw new RuntimeException("Members are required.");
+        }
+        members.stream().forEach(m -> m.setCreateDate(Instant.now()));
+        return repository.saveAll(members);
+    }
+
+    @Transactional
     public MemberDTO addParents(MemberRelates members) {
         Member member = findById(members.getMemberId());
         if (!member.getParents().isEmpty()) {
@@ -60,9 +69,16 @@ public class MemberService {
         all.add(member);
 
         member.getParents().add(father);
+        if (!father.getChildren().isEmpty()){
+            father.getChildren().stream().forEach(n -> member.getSiblings().add(n));
+            father.getChildren().stream().forEach(n -> n.getSiblings().add(member));
+        }
         father.getChildren().add(member);
 
         member.getParents().add(mother);
+        if (!mother.getChildren().isEmpty()){
+            mother.getChildren().stream().forEach(n -> member.getSiblings().add(n));
+        }
         mother.getChildren().add(member);
 
         repository.saveAll(all);
@@ -72,7 +88,6 @@ public class MemberService {
         return MemberDTO.of(member);
     }
 
-    //TODO: Create removeParents() method
     //TODO: Create removeParent() method.
 
     public Member findById(final String memberId) {
