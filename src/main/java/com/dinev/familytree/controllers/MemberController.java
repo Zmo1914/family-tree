@@ -1,7 +1,6 @@
 package com.dinev.familytree.controllers;
 
 import com.dinev.familytree.dtos.MemberRelates;
-import com.dinev.familytree.dtos.MemberDTO;
 import com.dinev.familytree.models.Member;
 import com.dinev.familytree.services.MemberService;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("familytree/v1/member")
+@RequestMapping("family-tree/v1/member")
 public class MemberController {
 
     private final MemberService service;
@@ -30,7 +29,6 @@ public class MemberController {
         return null;
     }
 
-
     @PostMapping("/add-member")
     public ResponseEntity<?> addMember(@RequestBody final Member member) {
         Member newMember = service.addMember(member);
@@ -38,6 +36,7 @@ public class MemberController {
                 .status(HttpStatus.ACCEPTED)
                 .body(newMember);
     }
+
     @PostMapping("/add-members")
     public ResponseEntity<?> addMembers(@RequestBody final List<Member> members){
         List<Member> entities = service.addMembers(members);
